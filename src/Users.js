@@ -118,22 +118,24 @@ class Users extends Component {
                 <p>{totalCount} results. Page {this.props.match.params.idx} of {numberOfPages} </p>
                 <Search handleSubmit={handleSubmit} updateSearchText={updateSearchText}/>
                 <Pager links={links}/>
-                <tbody>
-                    <tr style={{fontWeight: 'bold'}}><td>First Name</td><td>Last Name</td><td>Middle Name</td><td>Email</td><td>Title</td></tr>
-                    {
-                        (data.users !== undefined ? 
-                            data.users.map((user)=>
-                                <tr key={user.id}>
-                                    <td>{user.firstName}</td>
-                                    <td>{user.lastName}</td>
-                                    <td>{user.middleName}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.title}</td>
-                                </tr>
-                        )
-                        : null)
-                    }
-                </tbody>
+                <table>
+                    <tbody>
+                        <tr style={{fontWeight: 'bold'}}><td>First Name</td><td>Last Name</td><td>Middle Name</td><td>Email</td><td>Title</td></tr>
+                        {
+                            (data.users !== undefined ? 
+                                data.users.map((user)=>
+                                    <tr key={user.id}>
+                                        <td>{user.firstName}</td>
+                                        <td>{user.lastName}</td>
+                                        <td>{user.middleName}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.title}</td>
+                                    </tr>
+                            )
+                            : null)
+                        }
+                    </tbody>
+                </table>
             </div>
          );
     }
