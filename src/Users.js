@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Pager from './Pager';
+import Search from './Search';
 
 
 class Users extends Component {
@@ -11,14 +12,16 @@ class Users extends Component {
             countPerPage: 50,
             totalCount: 0,
             data: [],
-            links: []
+            links: [],
+            searchText: ''
          }
+         this.handleSubmit = this.handleSubmit.bind(this);
+         this.updateSearchText = this.updateSearchText.bind(this);
     }
 
     async componentDidMount() {
         try {
             const idx = this.props.match.params.idx || 0;
-            console.log(idx);
             const response = await axios.get(`https://acme-users-api-rev.herokuapp.com/api/users/${idx}`);
             this.setState({ data: response.data, totalCount: response.data.count, numberOfPages: Math.ceil(response.data.count/this.state.countPerPage) });
             const links = [];
@@ -36,10 +39,10 @@ class Users extends Component {
         }
 
     async componentDidUpdate(prevProps) {
+        if (prevProps.match.params.searchidx === undefined) {
         if (prevProps.match.params.idx !== this.props.match.params.idx){
         try {
             const idx = this.props.match.params.idx || 0;
-            console.log(idx);
             const response = await axios.get(`https://acme-users-api-rev.herokuapp.com/api/users/${idx}`);
             this.setState({ data: response.data, totalCount: response.data.count, numberOfPages: Math.ceil(response.data.count/this.state.countPerPage) });
             const links = [];
@@ -54,18 +57,66 @@ class Users extends Component {
           catch (error) {
             console.log(error);
           }
+        }}
+        else {
+            if (prevProps.match.params.searchidx !== this.props.match.params.searchidx){
+                try {
+                    const searchidx = this.props.match.params.searchidx || 0;
+                    const searchText = this.state.searchText;
+                    const response = await axios.get(`https://acme-users-api-rev.herokuapp.com/api/users/search/${searchText}/${searchidx}`);
+                    this.setState({ data: response.data, totalCount: response.data.count, numberOfPages: Math.ceil(response.data.count/this.state.countPerPage) });
+                    const links = [];
+                    for (let i = 0; i < this.state.numberOfPages; i++) {
+                        links.push({
+                            searchidx: i,
+                            text: i + 1,
+                            searchText: searchText
+                        })
+                    }
+                    this.setState({links})
+                  }
+                  catch (error) {
+                    console.log(error);
+                  }
+            }
         }
+    }
+
+    async handleSubmit(e, searchText, searchidx) {
+        e.preventDefault();
+        this.props.history.push(`/users/search/${searchText}/${(searchidx)}`)
+        try {
+            const idx = searchidx || 0;
+            const response = await axios.get(`https://acme-users-api-rev.herokuapp.com/api/users/search/${searchText}/${idx}`);
+            this.setState({ data: response.data, totalCount: response.data.count, numberOfPages: Math.ceil(response.data.count/this.state.countPerPage) });
+            const links = [];
+            for (let i = 0; i < this.state.numberOfPages; i++) {
+                links.push({
+                    searchidx: i,
+                    text: i + 1,
+                    searchText: searchText
+                })
+            }
+            this.setState({links})
+          }
+          catch (error) {
+            console.log(error);
+          }
+    }
+
+    updateSearchText(text) {
+        this.setState(
+            {searchText: text}
+        )
     }
     
     render() { 
-        // console.log(this.state.data)
-        // console.log(this.state.totalCount)
-        // console.log(this.state.numberOfPages)
-        // console.log(this.state.links)
         const { data, links, totalCount, numberOfPages } = this.state;
+        const { handleSubmit, updateSearchText } = this;
         return ( 
             <div>
                 <p>{totalCount} results. Page {this.props.match.params.idx} of {numberOfPages} </p>
+                <Search handleSubmit={handleSubmit} updateSearchText={updateSearchText}/>
                 <Pager links={links}/>
                 <tbody>
                     <tr style={{fontWeight: 'bold'}}><td>First Name</td><td>Last Name</td><td>Middle Name</td><td>Email</td><td>Title</td></tr>

@@ -1,13 +1,29 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 
 class Search extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
+        this.state = { 
+            searchText: '',
+            searchidx: 0
+         }
+         this.handleChange = this.handleChange.bind(this);
     }
+
+    handleChange(ev) {
+        this.setState({searchText: ev.target.value});
+    }
+
+
     render() { 
+        const { searchText, searchidx } = this.state;
+        const { handleChange } = this;
         return ( 
-            <div></div>
+            <form onSubmit={(e)=>{this.props.handleSubmit(e, searchText, searchidx); this.props.updateSearchText(searchText);}}>
+                <input type='text' value={searchText} onChange={handleChange}></input>
+                <button type='submit'>Search</button>
+            </form>
          );
     }
 }

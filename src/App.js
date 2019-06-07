@@ -4,6 +4,7 @@ import Home from './Home';
 import Nav from './Nav';
 import Users from './Users';
 
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -14,8 +15,10 @@ class App extends Component {
             <HashRouter>
                 <h1>Acme Users</h1>
                 <Nav />
+                
                 <Route exact path='/' component={Home}/>
-                <Route path='/users/:idx?' component={Users}/>
+                <Route exact path='/users/:idx?' component={Users}/>
+                <Route path='/users/search/:searchText/:searchidx?' component={Users}/>
             </HashRouter>
          );
     }
