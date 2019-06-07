@@ -15,7 +15,7 @@ class App extends Component {
                 <h1>Acme Users</h1>
                 <Nav />
                 <Route exact path='/' component={Home}/>
-                <Route exact path='/users' component={Users}/>
+                <Route path='/users/:idx?' component={Users}/>
             </HashRouter>
          );
     }

@@ -17,7 +17,9 @@ class Users extends Component {
 
     async componentDidMount() {
         try {
-            const response = await axios.get('https://acme-users-api-rev.herokuapp.com/api/users');
+            const idx = this.props.match.params.idx || 0;
+            console.log(idx);
+            const response = await axios.get(`https://acme-users-api-rev.herokuapp.com/api/users/${idx}`);
             this.setState({ data: response.data, totalCount: response.data.count, numberOfPages: Math.ceil(response.data.count/this.state.countPerPage) });
             const links = [];
             for (let i = 0; i < this.state.numberOfPages; i++) {
@@ -32,12 +34,34 @@ class Users extends Component {
             console.log(error);
           }
         }
+
+    async componentDidUpdate(prevProps) {
+        if (prevProps.match.params.idx !== this.props.match.params.idx){
+        try {
+            const idx = this.props.match.params.idx || 0;
+            console.log(idx);
+            const response = await axios.get(`https://acme-users-api-rev.herokuapp.com/api/users/${idx}`);
+            this.setState({ data: response.data, totalCount: response.data.count, numberOfPages: Math.ceil(response.data.count/this.state.countPerPage) });
+            const links = [];
+            for (let i = 0; i < this.state.numberOfPages; i++) {
+                links.push({
+                    idx: i,
+                    text: i + 1
+                })
+            }
+            this.setState({links})
+          }
+          catch (error) {
+            console.log(error);
+          }
+        }
+    }
     
     render() { 
-        console.log(this.state.data)
-        console.log(this.state.totalCount)
-        console.log(this.state.numberOfPages)
-        console.log(this.state.links)
+        // console.log(this.state.data)
+        // console.log(this.state.totalCount)
+        // console.log(this.state.numberOfPages)
+        // console.log(this.state.links)
         const { data, links } = this.state;
         return ( 
             <div>
