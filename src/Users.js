@@ -62,26 +62,27 @@ class Users extends Component {
         // console.log(this.state.totalCount)
         // console.log(this.state.numberOfPages)
         // console.log(this.state.links)
-        const { data, links } = this.state;
+        const { data, links, totalCount, numberOfPages } = this.state;
         return ( 
             <div>
-            <Pager links={links}/>
-            <tbody>
-                <tr style={{fontWeight: 'bold'}}><td>First Name</td><td>Last Name</td><td>Middle Name</td><td>Email</td><td>Title</td></tr>
-                {
-                    (data.users !== undefined ? 
-                        data.users.map((user)=>
-                            <tr key={user.id}>
-                                <td>{user.firstName}</td>
-                                <td>{user.lastName}</td>
-                                <td>{user.middleName}</td>
-                                <td>{user.email}</td>
-                                <td>{user.title}</td>
-                            </tr>
-                    )
-                     : null)
-                }
-            </tbody>
+                <p>{totalCount} results. Page {this.props.match.params.idx} of {numberOfPages} </p>
+                <Pager links={links}/>
+                <tbody>
+                    <tr style={{fontWeight: 'bold'}}><td>First Name</td><td>Last Name</td><td>Middle Name</td><td>Email</td><td>Title</td></tr>
+                    {
+                        (data.users !== undefined ? 
+                            data.users.map((user)=>
+                                <tr key={user.id}>
+                                    <td>{user.firstName}</td>
+                                    <td>{user.lastName}</td>
+                                    <td>{user.middleName}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.title}</td>
+                                </tr>
+                        )
+                        : null)
+                    }
+                </tbody>
             </div>
          );
     }
