@@ -5,8 +5,7 @@ class Search extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            searchText: '',
-            searchidx: 0
+            searchText: ''
          }
          this.handleChange = this.handleChange.bind(this);
     }
@@ -17,10 +16,12 @@ class Search extends Component {
 
 
     render() { 
-        const { searchText, searchidx } = this.state;
+        const { searchText } = this.state;
         const { handleChange } = this;
+        const { idx, handleSubmit } = this.props;
+        
         return ( 
-            <form onSubmit={(e)=>{this.props.handleSubmit(e, searchText, searchidx)}}>
+            <form onSubmit={(e)=>{handleSubmit(e, searchText, idx)}}>
                 <input type='text' value={searchText} onChange={handleChange}></input>
                 <button type='submit'>Search</button>
             </form>

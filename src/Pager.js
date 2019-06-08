@@ -8,10 +8,10 @@ const Pager = ({ links }) => {
                  {
                     links.map((link)=>
                         (
-                        ( link.idx ? 
+                        ( !link.searchText ? 
                         <li key={link.idx}><NavLink activeClassName='is-active' to={`/users/${(link.idx)}`}>{link.text}</NavLink></li>
                          :
-                         <li key={link.searchidx}><NavLink activeClassName='is-active' to={`/users/search/${link.searchText}/${(link.searchidx)}`}>{link.text}</NavLink></li>
+                         <li key={link.idx}><NavLink activeClassName='is-active' to={`/users/search/${link.searchText}/${(link.idx)}`}>{link.text}</NavLink></li>
                         )
                     )
                     
