@@ -49,7 +49,7 @@ class Users extends Component {
             for (let i = 0; i < this.state.numberOfPages; i++) {
                 links.push({
                     idx: i,
-                    text: i + 1
+                    text: i
                 })
             }
             this.setState({links})
@@ -69,7 +69,7 @@ class Users extends Component {
                     for (let i = 0; i < this.state.numberOfPages; i++) {
                         links.push({
                             searchidx: i,
-                            text: i + 1,
+                            text: i,
                             searchText: searchText
                         })
                     }
@@ -115,7 +115,7 @@ class Users extends Component {
         const { handleSubmit, updateSearchText } = this;
         return ( 
             <div>
-                <p>{totalCount} results. Page {this.props.match.params.idx} of {numberOfPages} </p>
+                <p>{totalCount} results. Page {this.props.match.params.idx || this.props.match.params.searchidx} of {numberOfPages} </p>
                 <Search handleSubmit={handleSubmit} updateSearchText={updateSearchText}/>
                 <Pager links={links}/>
                 <table>
