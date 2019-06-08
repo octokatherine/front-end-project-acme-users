@@ -18,7 +18,7 @@ class App extends Component {
                 
                 <Route exact path='/' component={Home}/>
                 <Route exact path='/users/:idx?' component={Users}/>
-                <Route path='/users/search/:searchText/:searchidx?' component={Users}/>
+                <Route path='/users/search/:searchText/:idx' component={Users}/>
             </HashRouter>
          );
     }

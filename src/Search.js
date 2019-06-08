@@ -20,7 +20,7 @@ class Search extends Component {
         const { searchText, searchidx } = this.state;
         const { handleChange } = this;
         return ( 
-            <form onSubmit={(e)=>{this.props.handleSubmit(e, searchText, searchidx); this.props.updateSearchText(searchText);}}>
+            <form onSubmit={(e)=>{this.props.handleSubmit(e, searchText, searchidx)}}>
                 <input type='text' value={searchText} onChange={handleChange}></input>
                 <button type='submit'>Search</button>
             </form>

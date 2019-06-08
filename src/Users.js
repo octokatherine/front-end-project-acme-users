@@ -13,10 +13,9 @@ class Users extends Component {
             totalCount: 0,
             data: [],
             links: [],
-            searchText: ''
+            searchText: this.props.match.params.searchText || ''
          }
          this.handleSubmit = this.handleSubmit.bind(this);
-         this.updateSearchText = this.updateSearchText.bind(this);
     }
 
     async componentDidMount() {
@@ -39,17 +38,17 @@ class Users extends Component {
         }
 
     async componentDidUpdate(prevProps) {
-        if (prevProps.match.params.searchidx === undefined) {
         if (prevProps.match.params.idx !== this.props.match.params.idx){
         try {
             const idx = this.props.match.params.idx || 0;
-            const response = await axios.get(`https://acme-users-api-rev.herokuapp.com/api/users/${idx}`);
+            const searchText = this.props.match.params.searchText || 0;
+            const response = await axios.get(`https://acme-users-api-rev.herokuapp.com/api/users${ searchText ? `/search/${searchText}`: ''}/${ idx }`);
             this.setState({ data: response.data, totalCount: response.data.count, numberOfPages: Math.ceil(response.data.count/this.state.countPerPage) });
             const links = [];
             for (let i = 0; i < this.state.numberOfPages; i++) {
                 links.push({
-                    idx: i,
-                    text: i
+                    idx: i + 1,
+                    text: i + 1
                 })
             }
             this.setState({links})
@@ -57,59 +56,15 @@ class Users extends Component {
           catch (error) {
             console.log(error);
           }
-        }}
-        else {
-            if (prevProps.match.params.searchidx !== this.props.match.params.searchidx){
-                try {
-                    const searchidx = this.props.match.params.searchidx || 0;
-                    const searchText = this.state.searchText;
-                    const response = await axios.get(`https://acme-users-api-rev.herokuapp.com/api/users/search/${searchText}/${searchidx}`);
-                    this.setState({ data: response.data, totalCount: response.data.count, numberOfPages: Math.ceil(response.data.count/this.state.countPerPage) });
-                    const links = [];
-                    for (let i = 0; i < this.state.numberOfPages; i++) {
-                        links.push({
-                            searchidx: i,
-                            text: i,
-                            searchText: searchText
-                        })
-                    }
-                    this.setState({links})
-                  }
-                  catch (error) {
-                    console.log(error);
-                  }
-            }
         }
     }
+    
 
     async handleSubmit(e, searchText, searchidx) {
         e.preventDefault();
         this.props.history.push(`/users/search/${searchText}/${(searchidx)}`)
-        try {
-            const idx = searchidx || 0;
-            const response = await axios.get(`https://acme-users-api-rev.herokuapp.com/api/users/search/${searchText}/${idx}`);
-            this.setState({ data: response.data, totalCount: response.data.count, numberOfPages: Math.ceil(response.data.count/this.state.countPerPage) });
-            const links = [];
-            for (let i = 0; i < this.state.numberOfPages; i++) {
-                links.push({
-                    searchidx: i,
-                    text: i + 1,
-                    searchText: searchText
-                })
-            }
-            this.setState({links})
-          }
-          catch (error) {
-            console.log(error);
-          }
     }
 
-    updateSearchText(text) {
-        this.setState(
-            {searchText: text}
-        )
-    }
-    
     render() { 
         const { data, links, totalCount, numberOfPages } = this.state;
         const { handleSubmit, updateSearchText } = this;
